@@ -1,0 +1,28 @@
+[project]
+name = "rise-analysis"
+version = "0.1.0"
+description = "SpicyRegs analysis of RISE"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "duckdb>=1.5.2",
+    "loguru>=0.7.3",
+    "seaborn>=0.13.2",
+    "spacy>=3.8.14",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+    "pip>=26.1.1",
+    "pytest>=9.0.3",
+    "ruff>=0.15.13",
+]
+
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+exclude = [
+    "notebooks"
+]

@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+vars:
+  GREETING: Hello, world!
+
+tasks:
+  setup:
+    desc: Set up repo for local work.
+    cmds:
+      - mkdir -p local-data
+      - uv lock
+      - uv sync
+    silent: true
+  get_data:
+    desc: Download the comment archive from GitHub.
+    cmds:
+      - curl -o local-data/ED-2025-OPE-0944_2026-03-30.json.gz https://github.com/user-attachments/files/26360947/ED-2025-OPE-0944_2026-03-30.json.gz
+      - cd local-data
+      - gunzip -k ED-2025-OPE-0944_2026-03-30.json.gz
