@@ -5,9 +5,10 @@ description = "SpicyRegs analysis of RISE"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "altair>=5.4.0",
     "duckdb>=1.5.2",
     "loguru>=0.7.3",
-    "seaborn>=0.13.2",
+    "polars>=1.15.0",
     "spacy>=3.8.14",
 ]
 
