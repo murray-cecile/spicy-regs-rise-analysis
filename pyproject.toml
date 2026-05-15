@@ -26,3 +26,7 @@ target-version = "py313"
 exclude = [
     "notebooks"
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

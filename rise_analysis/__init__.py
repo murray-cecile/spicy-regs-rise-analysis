@@ -1,4 +1,4 @@
-"""Re-exports for callers expecting ``rise_analysis.utils``; prefer ``text_cleaning``."""
+"""RISE comment analysis package."""
 
 from rise_analysis.text_cleaning import (
     CleanedComment,

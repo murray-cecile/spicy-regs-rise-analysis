@@ -8,11 +8,14 @@ wheels/
 
 # Virtual environments
 .venv
+.python-version
+
+# misc
+*.bak
 
 # notebook stuff
 **/.ipynb_checkpoints
 
 # data
 local-data/
-
 

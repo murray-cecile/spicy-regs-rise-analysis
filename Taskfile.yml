@@ -19,3 +19,13 @@ tasks:
       - curl -o local-data/ED-2025-OPE-0944_2026-03-30.json.gz https://github.com/user-attachments/files/26360947/ED-2025-OPE-0944_2026-03-30.json.gz
       - cd local-data
       - gunzip -k ED-2025-OPE-0944_2026-03-30.json.gz
+  test:
+    desc: Run pytest.
+    cmds:
+      - uv run pytest
+  check:
+    desc: Lint, format check, and tests (run before each review).
+    cmds:
+      - uv run ruff check .
+      - uv run ruff format --check .
+      - uv run pytest
