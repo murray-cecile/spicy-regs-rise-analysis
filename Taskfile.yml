@@ -2,9 +2,6 @@
 
 version: '3'
 
-vars:
-  GREETING: Hello, world!
-
 tasks:
   setup:
     desc: Set up repo for local work.

@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "altair>=5.4.0",
     "duckdb>=1.5.2",
+    "en-core-web-md",
     "loguru>=0.7.3",
     "polars>=1.15.0",
     "scikit-learn>=1.5.0",
@@ -32,3 +33,6 @@ exclude = [
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[tool.uv.sources]
+en-core-web-md = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0-py3-none-any.whl" }

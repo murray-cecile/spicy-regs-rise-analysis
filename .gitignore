@@ -19,3 +19,5 @@ wheels/
 # data
 local-data/
 
+# AI plan artifacts
+.ai/

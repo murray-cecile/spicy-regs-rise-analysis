@@ -19,7 +19,14 @@ The regulations.gov data has no organization field — all 17,730 comments are t
 
 ### Deliverables
 
-1. Stakeholder summary table
+#### Core questions
+
+- Who are the most active organizational commenters?
+- What are the major form letter campaigns and who appears to be behind them?
+- What's the ratio of organizational vs. individual comments?
+- Any notable patterns in submission timing or comment volume?
+
+##### Stakeholder summary table
 
 Categorize commenters into stakeholder types by extracting self-identified organizations from comment text and detecting form letter campaigns.
 
@@ -32,17 +39,20 @@ K-12 education stakeholders	—	?
 State agencies / AGs	—	?
 Loan servicers / financial	—	?
 Individuals (no org identified)	—	?
-2. Brief written analysis (1–2 pages)
 
-A short narrative summarizing:
+#### Work completed to date
 
-- Who are the most active organizational commenters?
-- What are the major form letter campaigns and who appears to be behind them?
-- What's the ratio of organizational vs. individual comments?
-- Any notable patterns in submission timing or comment volume?
+- exploratory data analysis to understand data structure and nature of cleaning needed
+- small Named Entity Recognition experiment to understand utility
+- pre-processing methods implemented
+- plot aggregate comment volume over the submission period
 
 ### Data Notes
 
 - Comment fields available: comment_id, docket_id, agency_code, title, comment, document_type, posted_date, modify_date, receive_date
 - Comments are HTML-encoded — decode before NLP processing
 - No attachments are included in this dataset (attachment extraction is tracked in Add Attachment URLs to Comments in ETL Pipeline #10)
+
+### NLP setup
+
+The English pipeline `en_core_web_md` is declared as a project dependency (pinned wheel URL in `pyproject.toml` / `[tool.uv.sources]`). After `uv sync`, the model is in the same `.venv` as spaCy—no separate `python -m spacy download` step is required. To re-verify the install: `task get_spacy_model`. To install alternative spacy models, use the direct URL dependency.
