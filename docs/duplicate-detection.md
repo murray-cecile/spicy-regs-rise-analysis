@@ -1,19 +1,12 @@
 # Duplicate and Near-Duplicate Comment Detection
 
-## Why this matters
+## Purpose of analysis
 
 Regulatory dockets routinely receive thousands of comments generated from
 campaign templates — organizations distribute a form letter that commenters
 send verbatim or with minor personalization. For the RISE docket (~17,730
-comments) treating each of those as an independent signal inflates perceived
-support or opposition and obscures the actual distribution of unique viewpoints.
-The goal of `assign_duplicate_clusters` is to group comments so downstream analysis can count campaigns rather than raw volume.
-
-## Findings
-
-- The most common duplicate comments are some variation on "See attached file," "file", "Comment on ED-2025-OPE-0944" indicating that there are significant additional PDF commentaries that are not included in this dataset. These PDF comments likely contain a disproportionate number of organization comments, given that these are more often formal letters. 
-- There are relatively few obviously templated comments - a double-digit number out of the >17,000 comments provided.
-- There is one campaign evident from the American Nurses Association.
+comments) treating each of those as an independent signal provides a more nuanced view of
+apparent support or opposition. The goal of `assign_duplicate_clusters` is to group comments so downstream analysis can count campaigns as well as raw volume.
 
 ## Methodology: Two-pass strategy
 
@@ -21,10 +14,9 @@ Detection runs in two ordered passes over the cleaned text.
 
 ### Pass 1: Exact matching
 
-Before any machine-learning, an inexpensive signature-based pass handles
-truly identical comments. Each comment is:
+A naive approach first handles truly identical comments. Each comment is processed as follows:
 
-1. HTML-stripped and boilerplate-removed via `clean_comment_text`
+1. HTML-stripped and boilerplate-removed (e.g. "see attached") via `clean_comment_text`
 2. Lowercased and whitespace-collapsed to a canonical key
 
 Comments that share a canonical key are immediately linked.  This
@@ -32,8 +24,7 @@ handles the bulk of template duplicates simply and efficiently.
 
 ### Pass 2: Fuzzy matching with blocking
 
-Comments that differ slightly — a personalized opener, a name at the bottom,
-one substituted word — won't share an exact key but still indicate a form letter or template. Detecting them requires similarity scoring, which is expensive if done naively across all pairs.
+Comments that differ slightly won't share an exact key but still likely indicate a form letter or template. Detecting them requires similarity scoring. Here, this is done with TF-IDF and cosine similarity.
 
 **Blocking** limits comparisons to plausible candidates.  
 Comments are bucketed by `len(text) // length_bucket_chars` (default 80).  A 400-character comment is only ever compared to other 320–480-character comments.  Template variants tend
@@ -45,7 +36,7 @@ Inside each block:
 - A `TfidfVectorizer` with unigrams and bigrams (`ngram_range=(1,2)`)
   converts texts to sparse L2-normalised vectors.
 - `linear_kernel` (a plain dot product) scores every pair.  Because the vectors
-  are already L2-normalised, the dot product equals cosine similarity — without
+  are already L2-normalised, the dot product equals cosine similarity, without
   the redundant re-normalisation step that `cosine_similarity` performs.
 - `np.argwhere(np.triu(sim, k=1) >= threshold)` extracts pairs above the
   similarity threshold in one vectorised NumPy call.
@@ -132,9 +123,9 @@ so `cluster_id` in the output DataFrame is human-readable and easy to
 
 | Parameter | Default | Effect |
 |---|---|---|
-| `similarity_threshold` | 0.92 | Higher → stricter; lower → more aggressive merging. Start at 0.90–0.95 and calibrate on a sample. |
-| `length_bucket_chars` | 80 | Smaller buckets → fewer cross-length comparisons; may miss near-dupes of different lengths. |
-| `max_features` | 4096 | TF-IDF vocabulary cap per block. Increase for very long comments; decrease to speed up large blocks. |
+| `similarity_threshold` | 0.92 | Higher is stricter while lower means more aggressive merging. Start at 0.90–0.95 and calibrate on a sample. |
+| `length_bucket_chars` | 80 | Smaller buckets means fewer cross-length comparisons but may miss near-dupes of different lengths. |
+| `max_features` | 4096 | TF-IDF vocabulary cap per block. Increase for very long comments and decrease to speed up large blocks. |
 
 Thresholds are heuristic.  A useful calibration workflow: run clustering, then
 sample 20–30 pairs near the threshold boundary and inspect them manually.

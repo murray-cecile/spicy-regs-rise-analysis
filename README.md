@@ -17,28 +17,18 @@ Problem
 
 The regulations.gov data has no organization field — all 17,730 comments are typed as "Public Submission" with a generic title. We can't tell who is commenting without analyzing the comment text itself.
 
-### Deliverables
+### Project Goals
 
 #### Core questions
 
-- Who are the most active organizational commenters?
-- What are the major form letter campaigns and who appears to be behind them?
-- What's the ratio of organizational vs. individual comments?
 - Any notable patterns in submission timing or comment volume?
+- What are the major form letter campaigns and who appears to be behind them?
+- Who are the most active organizational commenters?
+- What's the ratio of organizational vs. individual comments?
 
 ##### Stakeholder summary table
 
 Categorize commenters into stakeholder types by extracting self-identified organizations from comment text and detecting form letter campaigns.
-
-Category	Example	Count
-Higher ed institutions	"Lewis & Clark College"	?
-Professional associations	"American Bar Association"	?
-Student/borrower advocacy	"Student Debt Crisis Center"	?
-Mental health / counseling orgs	—	?
-K-12 education stakeholders	—	?
-State agencies / AGs	—	?
-Loan servicers / financial	—	?
-Individuals (no org identified)	—	?
 
 #### Work completed to date
 
@@ -47,12 +37,23 @@ Individuals (no org identified)	—	?
 - pre-processing methods implemented
 - plot aggregate comment volume over the submission period
 
+### Findings
+
+
+
 ### Data Notes
 
 - Comment fields available: comment_id, docket_id, agency_code, title, comment, document_type, posted_date, modify_date, receive_date
 - Comments are HTML-encoded — decode before NLP processing
 - No attachments are included in this dataset (attachment extraction is tracked in Add Attachment URLs to Comments in ETL Pipeline #10)
 
-### NLP setup
+### Installation
 
-The English pipeline `en_core_web_md` is declared as a project dependency (pinned wheel URL in `pyproject.toml` / `[tool.uv.sources]`). After `uv sync`, the model is in the same `.venv` as spaCy—no separate `python -m spacy download` step is required. To re-verify the install: `task get_spacy_model`. To install alternative spacy models, use the direct URL dependency.
+Prerequisites:
+
+- `uv` for Python dependency management
+- `go-task` (`brew install go-task`) for utility commands
+
+#### NLP setup
+
+`uv` doesn't play with spacy models as easily as pip. The English pipeline `en_core_web_md` is already declared as a project dependency, so no separate `python -m spacy download` step is required unless using a different corpus. To install alternative spacy models, use the direct URL dependency with `uv add`.
