@@ -26,7 +26,7 @@ def load_comments_json(path: str | Path) -> list[dict[str, Any]]:
         ValueError: If the structure is neither a list nor a dict with ``comments``.
     """
     raw_path = Path(path)
-    with raw_path.open(encoding="utf-8") as f:
+    with open(raw_path) as f:
         payload = json.load(f)
 
     if isinstance(payload, list):
