@@ -9,9 +9,13 @@ comments) treating each of those as an independent signal inflates perceived
 support or opposition and obscures the actual distribution of unique viewpoints.
 The goal of `assign_duplicate_clusters` is to group comments so downstream analysis can count campaigns rather than raw volume.
 
----
+## Findings
 
-## Two-pass strategy
+- The most common duplicate comments are some variation on "See attached file," "file", "Comment on ED-2025-OPE-0944" indicating that there are significant additional PDF commentaries that are not included in this dataset. These PDF comments likely contain a disproportionate number of organization comments, given that these are more often formal letters. 
+- There are relatively few obviously templated comments - a double-digit number out of the >17,000 comments provided.
+- There is one campaign evident from the American Nurses Association.
+
+## Methodology: Two-pass strategy
 
 Detection runs in two ordered passes over the cleaned text.
 
