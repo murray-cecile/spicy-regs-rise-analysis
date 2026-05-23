@@ -16,6 +16,12 @@ _DOCKET_BOILERPLATE_PATTERN = re.compile(
     r"(?i)\bcomment\s+ED-2025-OPE-0944\b[\s.,;:!?]*",
 )
 
+# HTML tags including <br>, <BR/>, etc. (case-insensitive).
+_HTML_TAG_PATTERN = re.compile(r"(?i)<[^>]+>")
+
+# List markers common in regulations.gov HTML (&bull;, &#8226;, middot, etc.).
+_BULLET_PATTERN = re.compile(r"[\u2022\u2023\u2043\u00b7\u2219\u25e6\u25aa\u25cf\u25cb]\s*")
+
 
 @dataclass(frozen=True, slots=True)
 class CleanedComment:
@@ -38,8 +44,10 @@ def strip_html_to_text(text: str | None) -> str:
     """Strip HTML tags, normalize a few entities, and collapse whitespace.
 
     Mirrors the logic developed in ``NamedEntityRecognition.ipynb``:
-    curly quote entities and ``&amp;`` are normalized before tag stripping,
-    then remaining numeric/named entities are resolved via ``html.unescape``.
+    curly quote entities and ``&amp;`` are normalized, then ``html.unescape`` runs
+    before tag removal so encoded breaks like ``&lt;br/&gt;`` become ``<br/>`` and
+    are stripped (not left as the token ``br``). Bullet entities (``&bull;``, etc.)
+    are removed after unescape so ``•`` does not appear as a spurious token.
 
     Args:
         text: Raw comment HTML or plain text. ``None`` is treated as empty.
@@ -55,8 +63,12 @@ def strip_html_to_text(text: str | None) -> str:
     while "&amp;" in out:
         out = out.replace("&amp;", "&")
 
-    out = re.sub(r"<[^>]+>", " ", out)
     out = unescape(out)
+    out = _HTML_TAG_PATTERN.sub(" ", out)
+    # A second pass catches tags revealed by unescape (e.g. &lt;br&gt; → <br>).
+    out = unescape(out)
+    out = _HTML_TAG_PATTERN.sub(" ", out)
+    out = _BULLET_PATTERN.sub(" ", out)
     out = re.sub(r"\s+", " ", out).strip()
     return out
 

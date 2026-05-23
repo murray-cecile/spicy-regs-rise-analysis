@@ -18,6 +18,7 @@ wheels/
 
 # data
 local-data/
+*.db*
 
 # AI plan artifacts
 .ai/

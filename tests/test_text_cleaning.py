@@ -31,6 +31,31 @@ def test_strip_html_collapses_whitespace() -> None:
     assert strip_html_to_text("a   <br/>  b") == "a b"
 
 
+def test_strip_html_encoded_br_tags() -> None:
+    """Entity-encoded line breaks are unescaped then removed (no stray 'br' token)."""
+    raw = "Line one&lt;br/&gt;Line two &lt;br&gt;Line three"
+    out = strip_html_to_text(raw)
+    assert out == "Line one Line two Line three"
+    assert " br " not in f" {out} "
+    assert "<" not in out and ">" not in out
+
+
+def test_strip_html_br_case_insensitive() -> None:
+    """Uppercase BR tags are stripped."""
+    assert strip_html_to_text("a<BR/>b") == "a b"
+
+
+def test_strip_html_bullet_entities() -> None:
+    """Bullet entities and unicode bullets are removed (not left as tokens)."""
+    raw = (
+        "Limits would:&bull;<span style='padding-left: 30px'></span>"
+        "Increase shortages;&bull; Exacerbate crises; &#8226; Undermine economies."
+    )
+    out = strip_html_to_text(raw)
+    assert "•" not in out
+    assert out == "Limits would: Increase shortages; Exacerbate crises; Undermine economies."
+
+
 def test_remove_boilerplate_attach_variants() -> None:
     """Several 'see attached' spellings are stripped."""
     cases = [

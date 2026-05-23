@@ -2,6 +2,10 @@
 
 version: '3'
 
+# NLTK_DATA: corpus lives inside the project venv (first path NLTK searches for uv/.venv).
+env:
+  NLTK_DATA: "{{.TASKFILE_DIR}}/.venv/nltk_data"
+
 tasks:
   setup:
     desc: Set up repo for local work.
@@ -16,8 +20,15 @@ tasks:
       - curl -o local-data/ED-2025-OPE-0944_2026-03-30.json.gz https://github.com/user-attachments/files/26360947/ED-2025-OPE-0944_2026-03-30.json.gz
       - cd local-data
       - gunzip -k ED-2025-OPE-0944_2026-03-30.json.gz
+  nlp-setup:
+    desc: Download NLTK stopwords into .venv/nltk_data and verify the spaCy model.
+    cmds:
+      - uv sync
+      - mkdir -p .venv/nltk_data
+      - uv run python -c "import nltk; nltk.download('stopwords', quiet=False); print('NLTK stopwords OK ->', '$NLTK_DATA')"
+      - uv run python -c "import en_core_web_md; en_core_web_md.load(); print('en_core_web_md OK')"
   test:
-    desc: Run pytest.
+    desc: Run pytest (requires nlp-setup to have been run once).
     cmds:
       - uv run pytest
   check:

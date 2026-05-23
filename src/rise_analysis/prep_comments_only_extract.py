@@ -49,7 +49,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default=FILE_PATH, required=True, help="Path to zipped json data")
+    parser.add_argument("--input-path", default=FILE_PATH, required=True, help="Path to zipped json data")
     args = parser.parse_args()
 
     main(args)

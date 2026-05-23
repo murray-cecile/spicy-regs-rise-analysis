@@ -39,7 +39,16 @@ Categorize commenters into stakeholder types by extracting self-identified organ
 
 ### Findings
 
+- Comment volume fluctuated over the week, with the most comments occuring midweek. 
+- Comment volume spiked at the end of the comment period.
+- Many commenters attached comments as PDFs or other files. These comments are not available for this analysis. This is probably a significant limitation on identifying organizations who commented and any messaging coordination between them, as organizations are probably more likely to submit formal letters or other documents.
+- Among individual commenters, there is evidence of one or more form letter campaigns. In particular, based on the fuzzy-matching duplicates analysis, the American Nurses Association and other state nurses associations appear to have coordinated one such campaign.
 
+### Future work
+
+- Topic modeling on the comments to discover further themes and/or clusters of messaging
+- Additional Named Entity Recognition work to try to identify comment authors
+- Classification of comments as coming from individuals vs. organizations
 
 ### Data Notes
 
@@ -51,9 +60,13 @@ Categorize commenters into stakeholder types by extracting self-identified organ
 
 Prerequisites:
 
-- `uv` for Python dependency management
+- `uv` (`pipx install uv`) for Python dependency management
 - `go-task` (`brew install go-task`) for utility commands
 
 #### NLP setup
 
-`uv` doesn't play with spacy models as easily as pip. The English pipeline `en_core_web_md` is already declared as a project dependency, so no separate `python -m spacy download` step is required unless using a different corpus. To install alternative spacy models, use the direct URL dependency with `uv add`.
+The English pipeline `en_core_web_md` is declared as a project dependency (wheel URL in `pyproject.toml`). After `uv sync`, use `from rise_analysis import load_nlp, extract_org_entities`.
+
+NLTK stopwords for LDA live in `.venv/nltk_data/` (inside the venv, already gitignored). Run `task nlp-setup` once per clone to download them. Task sets `NLTK_DATA` automatically; for notebooks use the project `.venv` kernel (NLTK searches `.venv/nltk_data` by default) or export `NLTK_DATA=$PWD/.venv/nltk_data` before starting Jupyter.
+
+To add another spaCy model, use `uv add` with the model's release wheel URL (see `[tool.uv.sources]` for `en-core-web-md`); `uv add <model_name>` alone usually will not resolve on PyPI.
