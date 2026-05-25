@@ -43,10 +43,10 @@ Categorize commenters into stakeholder types by extracting self-identified organ
 - Comment volume spiked at the end of the comment period.
 - Many commenters attached comments as PDFs or other files. These comments are not available for this analysis. This is probably a significant limitation on identifying organizations who commented and any messaging coordination between them, as organizations are probably more likely to submit formal letters or other documents.
 - Among individual commenters, there is evidence of one or more form letter campaigns. In particular, based on the fuzzy-matching duplicates analysis, the American Nurses Association and other state nurses associations appear to have coordinated one such campaign.
+- Major topic groupings in the response include references to nursing, social work, anesthesiology, and mental health. In addition - and unsurprisingly given the focus of the RISE proposed rule - the comments referenced professional and graduate degrees, loans, and access concerns.  
 
 ### Future work
 
-- Topic modeling on the comments to discover further themes and/or clusters of messaging
 - Additional Named Entity Recognition work to try to identify comment authors
 - Classification of comments as coming from individuals vs. organizations
 
