@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 
 import spacy
 
+# this makes the type checker work without importing spacy.language when methods
+# from module itself are imported
 if TYPE_CHECKING:
     from spacy.language import Language
 

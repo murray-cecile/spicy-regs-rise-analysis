@@ -48,7 +48,7 @@ def _normalize_for_exact_match(cleaned: str) -> str:
 
 
 def _comments_to_frame(comments: list[dict[str, Any]] | pl.DataFrame) -> pl.DataFrame:
-    """Utility function to convert comments to a Polars DataFrame."""
+    
     if isinstance(comments, pl.DataFrame):
         return comments.clone()
     return pl.DataFrame(comments)

@@ -36,6 +36,7 @@ Categorize commenters into stakeholder types by extracting self-identified organ
 - small Named Entity Recognition experiment to understand utility
 - pre-processing methods implemented
 - plot aggregate comment volume over the submission period
+- LDA topic modeling over the comment text
 
 ### Findings
 
